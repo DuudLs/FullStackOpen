@@ -1,4 +1,7 @@
 import { useState } from 'react'
+import Filter from './components/Filter.jsx'
+import PersonForm from './components/PersonForm.jsx'
+import Persons from './components/Persons.jsx'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -11,60 +14,16 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filteredName, setFilteredName] = useState('')
 
-  const addNameAndNumber = (event) => {
-    event.preventDefault()
-
-    const nameObject = {
-      name: newName,
-      number: newNumber,
-      id: persons.length + 1
-    }
-
-    setPersons(persons.concat(nameObject))
-    setNewName('')
-    setNewNumber('')
-  }
-
-  const handleNameChange = (event) => {
-    setNewName(event.target.value)
-  }
-
-  const handleNumberChange = (event) => {
-    setNewNumber(event.target.value)
-  }
-
-  const handleFilterChange = (event) => {
-    setFilteredName(event.target.value)
-  }
-
-  const personsToShow = persons.filter(person =>
-    person.name.toLowerCase().includes(filteredName.toLowerCase())
-  )
-
   return (
     <div>
       <h2>Phonebook</h2>
       <div>
-        filter <input value={filteredName} onChange={handleFilterChange} />
+        filter <Filter filteredName={filteredName} setFilteredName={setFilteredName} />
       </div>
       <h2>add a new</h2>
-      <form onSubmit={addNameAndNumber}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm persons={persons} setPersons={setPersons}	newName={newName} setNewName={setNewName} newNumber={newNumber} setNewNumber={setNewNumber} />
       <h2>Contacts</h2>
-      <div>
-        {personsToShow.map(person => (
-          <p key={person.id}>{`${person.name}: ${person.number}`}</p>
-        ))}
-      </div>
+      <Persons persons={persons} setPersons={setPersons} filteredName={filteredName} setFilteredName={setFilteredName} />
     </div>
   )
 }
