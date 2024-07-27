@@ -1,16 +1,22 @@
+import noteService from '../services/notes.js'
+
 const PersonForm = ({persons, setPersons, newName, setNewName, newNumber, setNewNumber}) => {
     const addNameAndNumber = (event) => {
       event.preventDefault()
-  
       const nameObject = {
         name: newName,
         number: newNumber,
         id: persons.length + 1
       }
-  
-      setPersons(persons.concat(nameObject))
-      setNewName('')
-      setNewNumber('')
+
+
+      noteService
+      .create(nameObject)
+      .then(returnedNote => {
+        setPersons(persons.concat(returnedNote))
+        setNewName('')
+        setNewNumber('')
+      })
     }
   
     const handleNameChange = (event) => {
