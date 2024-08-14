@@ -1,8 +1,12 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
+
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(cors());
+app.use(express.static("dist"));
 
 let persons = [
   {
@@ -64,7 +68,10 @@ app.post("/api/persons", (req, res) => {
     return res.status(400).json({ error: "name must be unique" });
   }
 
-  const setId = Math.ceil(Math.random() * 1000);
+  const setId = () => {
+    const maxId = notes.length > 0 ? Math.max(...notes.map((n) => n.id)) : 0;
+    return maxId + 1;
+  };
 
   const person = {
     id: String(setId + 1),
@@ -75,7 +82,7 @@ app.post("/api/persons", (req, res) => {
   res.json(person);
 });
 
-const PORT = 3001;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
