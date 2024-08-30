@@ -4,14 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
+    "start": "cross-env NODE_ENV=production node index.js",
+    "dev": "cross-env NODE_ENV=development nodemon index.js",
+    "test": "cross-env  NODE_ENV=test node --test",
     "build:ui": "rm -rf build && cd ../frontend/ && npm run build && cp -r build ../backend",
     "deploy": "fly deploy",
     "deploy:full": "npm run build:ui && npm run deploy",
     "logs:prod": "fly logs",
-    "lint": "eslint .",
-    "test": "node --test"
+    "lint": "eslint ."
   },
   "author": "",
   "license": "ISC",
@@ -21,5 +21,9 @@
     "express": "^4.19.2",
     "mongoose": "^8.5.4",
     "nodemon": "^3.1.4"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "supertest": "^7.0.0"
   }
 }

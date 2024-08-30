@@ -7,6 +7,10 @@ const blogSchema = new mongoose.Schema({
   likes: Number,
 });
 
+blogSchema.statics.findByIdAndRemove = async function (id) {
+  return await this.findOneAndDelete({ _id: id });
+};
+
 blogSchema.set("toJSON", {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
@@ -14,5 +18,14 @@ blogSchema.set("toJSON", {
     delete returnedObject.__v;
   },
 });
+
+blogSchema.statics.updateLikes = async function (id) {
+  const blog = await this.findByIdAndUpdate(
+    id,
+    { $inc: { likes: 1 } },
+    { new: true }
+  );
+  return blog;
+};
 
 module.exports = mongoose.model("Blog", blogSchema);
